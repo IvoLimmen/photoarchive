@@ -1,0 +1,15 @@
+apply plugin: 'java'
+
+task run(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'org.limmen.photoarchive.Main'
+
+  // arguments to pass to the application
+  args = []
+}
+
+dependencies {  
+  testCompile 'junit:junit:4.12'
+}
+
