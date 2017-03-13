@@ -20,8 +20,11 @@ public class FileArchiver {
 
 	private final CopyOption[] options;
 
-	public FileArchiver(Context context) {
+	private final ProgressMonitor progressMonitor;
+
+	public FileArchiver(Context context, ProgressMonitor progressMonitor) {
 		this.context = context;
+		this.progressMonitor = progressMonitor;
 
 		if (context.isOverwrite()) {
 			options = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING};
@@ -36,7 +39,7 @@ public class FileArchiver {
 
 		copy(Files.list(sourcePath)
 			// if the file does not start with a .
-			.filter(path -> !path.startsWith(".")) 
+			.filter(path -> !path.startsWith("."))
 			// only if the extention is in our list
 			.filter(path -> context.getExtentions().contains(getExtention(path)))
 			.collect(Collectors.toList()));
@@ -52,9 +55,11 @@ public class FileArchiver {
 		// make sure the base directories have been made
 		context.getTargetPath().mkdirs();
 
-		files.forEach(f -> {
-			copy(f);
-		});
+		for (int index = 0; index < files.size(); index++) {
+			Path file = files.get(index);
+			progressMonitor.updateProgress(index, files.size());
+			copy(file);
+		}
 	}
 
 	private void copy(Path f) {
