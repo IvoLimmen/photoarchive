@@ -32,14 +32,15 @@ public class Main extends Application {
 
 	private final CheckBox overwrite = new CheckBox("Overwrite files");
 
+	private final CheckBox preferExif = new CheckBox("Prefer EXIF");
+
 	public Main() {
-		this.context.addExtention("jpg");
-		this.context.addExtention("jpeg");
-		this.context.addExtention("mp4");
 		this.context.setSourcePath(new File(System.getProperty("user.home"), "Downloads"));
 		this.context.setTargetPath(new File(System.getProperty("user.home"), "Pictures"));
+		this.context.setPreferExif(true);
 
 		this.overwrite.selectedProperty().setValue(context.isOverwrite());
+		this.preferExif.selectedProperty().setValue(context.isPreferExif());
 		this.sourceDirectory.setText(this.context.getSourcePath().getAbsolutePath());
 		this.targetDirectory.setText(this.context.getTargetPath().getAbsolutePath());
 	}
@@ -85,10 +86,11 @@ public class Main extends Application {
 		gridPane.add(targetDirectoryButton, 2, 1);
 
 		gridPane.add(overwrite, 1, 2);
+		gridPane.add(preferExif, 1, 3);
 
 		HBox buttonPanel = new HBox(10);
 		buttonPanel.setAlignment(Pos.CENTER);
-		gridPane.add(buttonPanel, 0, 3);
+		gridPane.add(buttonPanel, 0, 4);
 		GridPane.setColumnSpan(buttonPanel, GridPane.REMAINING);
 
 		Button startButton = new Button("Execute");
@@ -104,7 +106,7 @@ public class Main extends Application {
 		StackPane root = new StackPane();
 		root.getChildren().add(gridPane);
 
-		return new Scene(root, 430, 150);
+		return new Scene(root, 430, 165);
 	}
 
 	private void onClickExit(ActionEvent event) {
@@ -114,25 +116,34 @@ public class Main extends Application {
 	private void onClickSourceDirectoryButton(ActionEvent event) {
 		directoryChooser.setInitialDirectory(context.getSourcePath());
 		directoryChooser.setTitle("Select a source directory");
-		context.setSourcePath(directoryChooser.showDialog(stage));
-		sourceDirectory.setText(context.getSourcePath().getAbsolutePath());
+		File tmp = directoryChooser.showDialog(stage);
+		if (tmp != null) {
+			context.setSourcePath(tmp);
+			sourceDirectory.setText(context.getSourcePath().getAbsolutePath());
+		}
 	}
 
 	private void onClickTargetDirectoryButton(ActionEvent event) {
 		directoryChooser.setInitialDirectory(context.getTargetPath());
 		directoryChooser.setTitle("Select a target directory");
-		context.setTargetPath(directoryChooser.showDialog(stage));
-		targetDirectory.setText(context.getTargetPath().getAbsolutePath());
+		File tmp = directoryChooser.showDialog(stage);
+		if (tmp != null) {
+			context.setTargetPath(tmp);
+			targetDirectory.setText(context.getTargetPath().getAbsolutePath());
+		}
 	}
 
 	private void onClickStart(ActionEvent event) {
-		context.setSourcePath(new File("/home/ivo/Downloads/drive-download"));
-		context.setTargetPath(new File("/home/ivo/Downloads/test"));
+		context.setSourcePath(new File(sourceDirectory.getText()));
+		context.setTargetPath(new File(targetDirectory.getText()));
 
 		context.addExtention("jpg");
 		context.addExtention("jpeg");
 		context.addExtention("png");
 		context.addExtention("mp4");
+
+		context.setOverwrite(overwrite.selectedProperty().getValue());
+		context.setPreferExif(preferExif.selectedProperty().getValue());
 
 		TaskExecutor taskExecutor = new TaskExecutor(context);
 		ProgressDialog dialog = new ProgressDialog("Copying...");

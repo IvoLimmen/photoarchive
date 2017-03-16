@@ -7,8 +7,10 @@ import java.util.List;
 public class Context {
 
 	private final List<String> extentions = new ArrayList<>();
-	
+
 	private boolean overwrite;
+	
+	private boolean preferExif;
 
 	private File sourcePath;
 
@@ -34,8 +36,16 @@ public class Context {
 		return overwrite;
 	}
 
+	public boolean isPreferExif() {
+		return preferExif;
+	}
+
 	public void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
+	}
+
+	public void setPreferExif(boolean preferExif) {
+		this.preferExif = preferExif;
 	}
 
 	public void setSourcePath(File sourcePath) {

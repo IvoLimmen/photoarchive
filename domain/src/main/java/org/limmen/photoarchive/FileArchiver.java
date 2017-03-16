@@ -3,13 +3,10 @@ package org.limmen.photoarchive;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +19,8 @@ public class FileArchiver {
 
 	private final ProgressMonitor progressMonitor;
 
+	private final DateExtractor dateExtractor;
+	
 	public FileArchiver(Context context, ProgressMonitor progressMonitor) {
 		this.context = context;
 		this.progressMonitor = progressMonitor;
@@ -31,6 +30,7 @@ public class FileArchiver {
 		} else {
 			options = new CopyOption[]{StandardCopyOption.COPY_ATTRIBUTES};
 		}
+		dateExtractor = new DateExtractor(context.isPreferExif());
 	}
 
 	public void archive() throws IOException {
@@ -63,8 +63,6 @@ public class FileArchiver {
 	}
 
 	private void copy(Path f) {
-		System.out.println("Copy " + f);
-
 		try {
 			Files.copy(f, buildTargetPath(f), options);
 		}
@@ -75,9 +73,8 @@ public class FileArchiver {
 	}
 
 	private Path buildTargetPath(Path file) throws IOException {
-		BasicFileAttributes bfa = Files.readAttributes(file, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
-		LocalDateTime ldt = LocalDateTime.ofInstant(bfa.creationTime().toInstant(), ZoneOffset.UTC);
-
+		LocalDateTime ldt = dateExtractor.getCreationDate(file);
+		
 		List<String> dirs = new ArrayList<>();
 		dirs.add(Integer.toString(ldt.getYear()));
 		dirs.add(rpad(Integer.toString(ldt.getMonthValue()), 2));
