@@ -35,6 +35,9 @@ public class Main extends Application {
 	private final CheckBox preferExif = new CheckBox("Prefer EXIF");
 
 	public Main() {
+		this.context.addExtention("jpg");
+		this.context.addExtention("jpeg");
+		this.context.addExtention("mp4");
 		this.context.setSourcePath(new File(System.getProperty("user.home"), "Downloads"));
 		this.context.setTargetPath(new File(System.getProperty("user.home"), "Pictures"));
 		this.context.setPreferExif(true);
@@ -136,11 +139,6 @@ public class Main extends Application {
 	private void onClickStart(ActionEvent event) {
 		context.setSourcePath(new File(sourceDirectory.getText()));
 		context.setTargetPath(new File(targetDirectory.getText()));
-
-		context.addExtention("jpg");
-		context.addExtention("jpeg");
-		context.addExtention("png");
-		context.addExtention("mp4");
 
 		context.setOverwrite(overwrite.selectedProperty().getValue());
 		context.setPreferExif(preferExif.selectedProperty().getValue());

@@ -1,10 +1,10 @@
 package org.limmen.photoarchive;
 
-import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -13,6 +13,7 @@ public class ProgressDialog {
    
    private final Stage dialogStage;
    private final ProgressBar progressBar = new ProgressBar(0);
+   private final Label label = new Label();
    
    public ProgressDialog(String title) {
       dialogStage = new Stage();
@@ -22,19 +23,22 @@ public class ProgressDialog {
       dialogStage.setTitle(title);
       
       progressBar.setProgress(0);  
-      progressBar.setPrefSize(200d, 15d);
+      progressBar.setPrefSize(300d, 15d);
       
-      final HBox hb = new HBox();
-      hb.setSpacing(5);
-      hb.setAlignment(Pos.CENTER);
-      hb.getChildren().addAll(progressBar);      
+      final VBox vb = new VBox();
+      vb.setSpacing(5);
+      vb.setAlignment(Pos.CENTER);
+	  
+	  vb.getChildren().add(label);
+      vb.getChildren().add(progressBar);      
       
-      Scene scene = new Scene(hb, 200, 15);
+      Scene scene = new Scene(vb, 400, 40);
       dialogStage.setScene(scene);
    }
    
-   public void activateProgressBar(final Task<?> task) {
+   public void activateProgressBar(final TaskExecutor task) {
       progressBar.progressProperty().bind(task.progressProperty());
+	  label.textProperty().bind(task.getFileProperty());
    }
    
    public Stage getDialogStage() {

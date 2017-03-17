@@ -20,7 +20,7 @@ public class FileArchiver {
 	private final ProgressMonitor progressMonitor;
 
 	private final DateExtractor dateExtractor;
-	
+
 	public FileArchiver(Context context, ProgressMonitor progressMonitor) {
 		this.context = context;
 		this.progressMonitor = progressMonitor;
@@ -37,12 +37,7 @@ public class FileArchiver {
 
 		Path sourcePath = context.getSourcePath().toPath();
 
-		copy(Files.list(sourcePath)
-			// if the file does not start with a .
-			.filter(path -> !path.startsWith("."))
-			// only if the extention is in our list
-			.filter(path -> context.getExtentions().contains(getExtention(path)))
-			.collect(Collectors.toList()));
+		copy(Files.list(sourcePath).collect(Collectors.toList()));
 	}
 
 	private String getExtention(Path file) {
@@ -55,26 +50,37 @@ public class FileArchiver {
 		// make sure the base directories have been made
 		context.getTargetPath().mkdirs();
 
+		long failed = 0;
+		long skipped = 0;
+
 		for (int index = 0; index < files.size(); index++) {
 			Path file = files.get(index);
-			progressMonitor.updateProgress(index, files.size());
-			copy(file);
+
+			if (!context.getExtentions().contains(getExtention(file))) {
+				skipped++;
+			} else {
+
+				progressMonitor.updateProgress(file, failed, skipped, index, files.size());
+				if (!copy(file)) {
+					failed++;
+				}
+			}
 		}
 	}
 
-	private void copy(Path f) {
+	private boolean copy(Path f) {
 		try {
 			Files.copy(f, buildTargetPath(f), options);
+			return true;
 		}
 		catch (IOException ex) {
-			System.out.println("Failed: " + f);
-			ex.printStackTrace();
+			return false;
 		}
 	}
 
 	private Path buildTargetPath(Path file) throws IOException {
 		LocalDateTime ldt = dateExtractor.getCreationDate(file);
-		
+
 		List<String> dirs = new ArrayList<>();
 		dirs.add(Integer.toString(ldt.getYear()));
 		dirs.add(rpad(Integer.toString(ldt.getMonthValue()), 2));
