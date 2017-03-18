@@ -32,7 +32,7 @@ public class ProgressDialog {
 	  vb.getChildren().add(label);
       vb.getChildren().add(progressBar);      
       
-      Scene scene = new Scene(vb, 400, 40);
+      Scene scene = new Scene(vb, 400, 45);
       dialogStage.setScene(scene);
    }
    

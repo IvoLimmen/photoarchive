@@ -2,8 +2,11 @@ package org.limmen.photoarchive;
 
 import java.nio.file.Path;
 
-@FunctionalInterface
 public interface ProgressMonitor {
 	
-	void updateProgress(Path currentFile, long failed, long skipped, long current, long total);
+	void skipFile(Path file);
+
+	void failedFile(Path file, Throwable throwable);
+	
+	void updateProgress(Path currentFile, long current, long total);
 }

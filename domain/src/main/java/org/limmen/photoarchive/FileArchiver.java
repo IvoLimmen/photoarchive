@@ -50,32 +50,25 @@ public class FileArchiver {
 		// make sure the base directories have been made
 		context.getTargetPath().mkdirs();
 
-		long failed = 0;
-		long skipped = 0;
-
 		for (int index = 0; index < files.size(); index++) {
 			Path file = files.get(index);
 
 			if (!context.getExtentions().contains(getExtention(file))) {
-				skipped++;
+				progressMonitor.skipFile(file);
 			} else {
-
-				progressMonitor.updateProgress(file, failed, skipped, index, files.size());
-				if (!copy(file)) {
-					failed++;
+				progressMonitor.updateProgress(file, index, files.size());
+				try {
+					copy(file);
+				}
+				catch (IOException ex) {
+					progressMonitor.failedFile(file, ex);
 				}
 			}
 		}
 	}
 
-	private boolean copy(Path f) {
-		try {
-			Files.copy(f, buildTargetPath(f), options);
-			return true;
-		}
-		catch (IOException ex) {
-			return false;
-		}
+	private void copy(Path f) throws IOException {
+		Files.copy(f, buildTargetPath(f), options);
 	}
 
 	private Path buildTargetPath(Path file) throws IOException {
