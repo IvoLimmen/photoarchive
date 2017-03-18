@@ -6,7 +6,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 String mavenGroupId = 'org.limmen.photoarchive'
-String mavenVersion = '1.0-SNAPSHOT'
+String mavenVersion = '0.0.1'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
