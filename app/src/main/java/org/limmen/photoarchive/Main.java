@@ -1,6 +1,8 @@
 package org.limmen.photoarchive;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -28,6 +30,8 @@ public class Main extends Application {
 
 	private final TextField sourceDirectory = new TextField();
 
+	private final TextField extentions = new TextField();
+
 	private final TextField targetDirectory = new TextField();
 
 	private final CheckBox overwrite = new CheckBox("Overwrite files");
@@ -44,6 +48,7 @@ public class Main extends Application {
 
 		this.overwrite.selectedProperty().setValue(context.isOverwrite());
 		this.preferExif.selectedProperty().setValue(context.isPreferExif());
+		this.extentions.setText(this.context.getExtentions().stream().collect(Collectors.joining(",")));
 		this.sourceDirectory.setText(this.context.getSourcePath().getAbsolutePath());
 		this.targetDirectory.setText(this.context.getTargetPath().getAbsolutePath());
 	}
@@ -78,22 +83,28 @@ public class Main extends Application {
 		sourceDirectoryButton.setOnAction(this::onClickSourceDirectoryButton);
 		gridPane.add(sourceDirectoryButton, 2, 0);
 
+		Label extentionsLabel = new Label("Extentions");
+		gridPane.add(extentionsLabel, 0, 1);
+
+		extentions.setMaxWidth(250);
+		gridPane.add(extentions, 1, 1);
+
 		Label targetDirectoryLabel = new Label("Target directory");
-		gridPane.add(targetDirectoryLabel, 0, 1);
+		gridPane.add(targetDirectoryLabel, 0, 2);
 
 		targetDirectory.setMinWidth(250);
-		gridPane.add(targetDirectory, 1, 1);
+		gridPane.add(targetDirectory, 1, 2);
 
 		Button targetDirectoryButton = new Button("...");
 		targetDirectoryButton.setOnAction(this::onClickTargetDirectoryButton);
-		gridPane.add(targetDirectoryButton, 2, 1);
+		gridPane.add(targetDirectoryButton, 2, 2);
 
-		gridPane.add(overwrite, 1, 2);
-		gridPane.add(preferExif, 1, 3);
+		gridPane.add(overwrite, 1, 3);
+		gridPane.add(preferExif, 1, 4);
 
 		HBox buttonPanel = new HBox(10);
 		buttonPanel.setAlignment(Pos.CENTER);
-		gridPane.add(buttonPanel, 0, 4);
+		gridPane.add(buttonPanel, 0, 5);
 		GridPane.setColumnSpan(buttonPanel, GridPane.REMAINING);
 
 		Button startButton = new Button("Execute");
@@ -109,7 +120,7 @@ public class Main extends Application {
 		StackPane root = new StackPane();
 		root.getChildren().add(gridPane);
 
-		return new Scene(root, 430, 165);
+		return new Scene(root, 430, 200);
 	}
 
 	private void onClickExit(ActionEvent event) {
@@ -139,9 +150,18 @@ public class Main extends Application {
 	private void onClickStart(ActionEvent event) {
 		context.setSourcePath(new File(sourceDirectory.getText()));
 		context.setTargetPath(new File(targetDirectory.getText()));
-
+		context.getExtentions().clear();
+		if (extentions.getText() != null && extentions.getText().length() > 0) {
+			context.getExtentions().addAll(Arrays.asList(extentions.getText().split(",")));
+		}
 		context.setOverwrite(overwrite.selectedProperty().getValue());
 		context.setPreferExif(preferExif.selectedProperty().getValue());
+
+		// checks
+		if (context.getExtentions().isEmpty()) {
+			showError("Error", "There are no extentions, nothing would be copied...");
+			return;
+		}
 
 		TaskExecutor taskExecutor = new TaskExecutor(context);
 		ProgressDialog dialog = new ProgressDialog("Copying...");
