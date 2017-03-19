@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 String mavenGroupId = 'org.limmen.photoarchive'
-String mavenVersion = '0.0.2-SNAPSHOT'
+String mavenVersion = '0.0.2'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
