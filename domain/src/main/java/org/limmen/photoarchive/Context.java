@@ -9,12 +9,14 @@ public class Context {
 	private final List<String> extentions = new ArrayList<>();
 
 	private boolean overwrite;
-	
+
 	private boolean preferExif;
 
 	private File sourcePath;
 
 	private File targetPath;
+	
+	private String targetPattern;
 
 	public void addExtention(String extention) {
 		this.extentions.add(extention);
@@ -30,6 +32,10 @@ public class Context {
 
 	public File getTargetPath() {
 		return targetPath;
+	}
+
+	public String getTargetPattern() {
+		return targetPattern;
 	}
 
 	public boolean isOverwrite() {
@@ -54,5 +60,9 @@ public class Context {
 
 	public void setTargetPath(File targetPath) {
 		this.targetPath = targetPath;
+	}
+
+	public void setTargetPattern(String targetPattern) {
+		this.targetPattern = targetPattern;
 	}
 }

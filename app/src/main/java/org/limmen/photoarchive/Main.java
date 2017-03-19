@@ -2,7 +2,6 @@ package org.limmen.photoarchive;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -14,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -34,21 +34,19 @@ public class Main extends Application {
 
 	private final TextField targetDirectory = new TextField();
 
+	private final TextField targetPathPattern = new TextField();
+	
 	private final CheckBox overwrite = new CheckBox("Overwrite files");
 
 	private final CheckBox preferExif = new CheckBox("Prefer EXIF");
 
 	public Main() {
-		this.context.addExtention("jpg");
-		this.context.addExtention("jpeg");
-		this.context.addExtention("mp4");
 		this.context.setSourcePath(new File(System.getProperty("user.home"), "Downloads"));
 		this.context.setTargetPath(new File(System.getProperty("user.home"), "Pictures"));
-		this.context.setPreferExif(true);
-
-		this.overwrite.selectedProperty().setValue(context.isOverwrite());
-		this.preferExif.selectedProperty().setValue(context.isPreferExif());
-		this.extentions.setText(this.context.getExtentions().stream().collect(Collectors.joining(",")));
+		this.overwrite.selectedProperty().setValue(false);
+		this.preferExif.selectedProperty().setValue(true);
+		this.extentions.setText("jpg,jpeg,mp4");
+		this.targetPathPattern.setText("yyyy\\mm\\dd");
 		this.sourceDirectory.setText(this.context.getSourcePath().getAbsolutePath());
 		this.targetDirectory.setText(this.context.getTargetPath().getAbsolutePath());
 	}
@@ -98,13 +96,22 @@ public class Main extends Application {
 		Button targetDirectoryButton = new Button("...");
 		targetDirectoryButton.setOnAction(this::onClickTargetDirectoryButton);
 		gridPane.add(targetDirectoryButton, 2, 2);
+		
+		Label targetPatternLabel = new Label("Target pattern");
+		gridPane.add(targetPatternLabel, 0, 3);
 
-		gridPane.add(overwrite, 1, 3);
-		gridPane.add(preferExif, 1, 4);
+		targetPathPattern.setTooltip(new Tooltip("Use the following codes:\nyyyy - The full year\nyy - The short year\n"
+			+ "mmm - Month in text\nmm - Month in numbers padded to fit\nm - Month in numbers\n"
+			+ "ddd - Days of year\ndd - Days of month padded to fit\nd - Days of month"));
+		targetPathPattern.setMinWidth(250);
+		gridPane.add(targetPathPattern, 1, 3);
+		
+		gridPane.add(overwrite, 1, 4);
+		gridPane.add(preferExif, 1, 5);
 
 		HBox buttonPanel = new HBox(10);
 		buttonPanel.setAlignment(Pos.CENTER);
-		gridPane.add(buttonPanel, 0, 5);
+		gridPane.add(buttonPanel, 0, 6);
 		GridPane.setColumnSpan(buttonPanel, GridPane.REMAINING);
 
 		Button startButton = new Button("Execute");
@@ -120,7 +127,7 @@ public class Main extends Application {
 		StackPane root = new StackPane();
 		root.getChildren().add(gridPane);
 
-		return new Scene(root, 430, 200);
+		return new Scene(root, 430, 230);
 	}
 
 	private void onClickExit(ActionEvent event) {
@@ -150,6 +157,7 @@ public class Main extends Application {
 	private void onClickStart(ActionEvent event) {
 		context.setSourcePath(new File(sourceDirectory.getText()));
 		context.setTargetPath(new File(targetDirectory.getText()));
+		context.setTargetPattern(targetPathPattern.getText());
 		context.getExtentions().clear();
 		if (extentions.getText() != null && extentions.getText().length() > 0) {
 			context.getExtentions().addAll(Arrays.asList(extentions.getText().split(",")));
