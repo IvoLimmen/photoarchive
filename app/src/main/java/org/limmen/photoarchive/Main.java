@@ -102,7 +102,8 @@ public class Main extends Application {
 
 		targetPathPattern.setTooltip(new Tooltip("Use the following codes:\nyyyy - The full year\nyy - The short year\n"
 			+ "mmm - Month in text\nmm - Month in numbers padded to fit\nm - Month in numbers\n"
-			+ "ddd - Days of year\ndd - Days of month padded to fit\nd - Days of month"));
+			+ "ddd - Days of year\ndd - Days of month padded to fit\nd - Days of month\n"
+			+ "cc - CountryCode from GPS location"));
 		targetPathPattern.setMinWidth(250);
 		gridPane.add(targetPathPattern, 1, 3);
 		

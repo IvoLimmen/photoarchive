@@ -1,6 +1,6 @@
 package org.limmen.photoarchive.pattern;
 
-import java.time.LocalDateTime;
+import org.limmen.photoarchive.FileMetadata;
 
 public class YearPattern extends AbstractPattern {
 
@@ -10,8 +10,8 @@ public class YearPattern extends AbstractPattern {
 	}
 	
 	@Override
-	public String apply(String directory, LocalDateTime localDateTime) {
-		int year = localDateTime.getYear();
+	public String apply(String directory, FileMetadata metadata) {
+		int year = metadata.getLocalDateTime().getYear();
 		return directory.replace("yyyy", Integer.toString(year));
 	}
 }

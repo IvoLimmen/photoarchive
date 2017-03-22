@@ -1,8 +1,8 @@
 package org.limmen.photoarchive.pattern;
 
-import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import org.limmen.photoarchive.FileMetadata;
 
 public class NamedMonthPattern extends AbstractPattern {
 
@@ -12,8 +12,8 @@ public class NamedMonthPattern extends AbstractPattern {
 	}
 
 	@Override
-	public String apply(String directory, LocalDateTime localDateTime) {
-		String month = localDateTime.getMonth().getDisplayName(TextStyle.FULL, Locale.US);
+	public String apply(String directory, FileMetadata metadata) {
+		String month = metadata.getLocalDateTime().getMonth().getDisplayName(TextStyle.FULL, Locale.US);
 		return directory.replace("mmm", month);
 	}
 }

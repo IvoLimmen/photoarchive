@@ -18,11 +18,11 @@ public class DateExtractor {
 
 	private final boolean preferExif;
 
-	public DateExtractor(boolean preferExif) {
-		this.preferExif = preferExif;
+	public DateExtractor(Context context) {
+		this.preferExif = context.isPreferExif();
 	}
 
-	public LocalDateTime getCreationDate(Path file) throws IOException {
+	public void extractCreationDate(Path file, FileMetadata metadata) throws IOException {
 
 		LocalDateTime localDateTime = null;
 		if (preferExif) {
@@ -38,7 +38,7 @@ public class DateExtractor {
 			localDateTime = fromFile(file);
 		}
 
-		return localDateTime;
+		metadata.setLocalDateTime(localDateTime);
 	}
 
 	private LocalDateTime fromExif(File file) throws ImageProcessingException, IOException {

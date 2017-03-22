@@ -38,7 +38,7 @@ public class FileArchiver {
 
 	private String getExtention(Path file) {
 		String ext = file.getFileName().toString();
-		return ext.substring(1 + ext.indexOf(".")).toLowerCase();
+		return ext.substring(1 + ext.lastIndexOf(".")).toLowerCase();
 	}
 
 	private void copy(List<Path> files) {

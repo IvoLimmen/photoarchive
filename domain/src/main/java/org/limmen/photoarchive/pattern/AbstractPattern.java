@@ -1,12 +1,12 @@
 package org.limmen.photoarchive.pattern;
 
-import java.time.LocalDateTime;
+import org.limmen.photoarchive.FileMetadata;
 
 public abstract class AbstractPattern {
 
 	public abstract boolean applicable(String directory);
 
-	public abstract String apply(String directory, LocalDateTime localDateTime);
+	public abstract String apply(String directory, FileMetadata metadata);
 
 	protected boolean testExactPattern(String directory, String character, int amount) {
 		boolean applicable = false;

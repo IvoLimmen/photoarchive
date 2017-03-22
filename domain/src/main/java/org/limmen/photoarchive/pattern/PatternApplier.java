@@ -1,8 +1,8 @@
 package org.limmen.photoarchive.pattern;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.limmen.photoarchive.FileMetadata;
 
 public class PatternApplier {
 
@@ -21,28 +21,28 @@ public class PatternApplier {
 		patterns.add(new PaddedShortMonthPattern());
 		patterns.add(new NamedMonthPattern());
 		patterns.add(new FullDayPattern());
+		patterns.add(new CountryCodePattern());
 	}
 
-	public String[] apply(LocalDateTime localDateTime) {
+	public String[] apply(FileMetadata fileMetadata) {
 		List<String> dirs = new ArrayList<>();
 
 		String[] parts = pattern.split("\\\\");
 		for (String part : parts) {
-			dirs.add(applyDateToDir(part, localDateTime));
+			dirs.add(applyDateToDir(part, fileMetadata));
 		}
 
 		return dirs.toArray(new String[dirs.size()]);
 	}
 
-	private String applyDateToDir(String directory, LocalDateTime localDateTime) {
-		for (int i = 0; i < directory.length(); i++) {
-			for (AbstractPattern abstractPattern : this.patterns) {
-				if (abstractPattern.applicable(directory)) {
-					directory = abstractPattern.apply(directory, localDateTime);
-				}
+	private String applyDateToDir(final String directory, final FileMetadata localDateTime) {
+		String newDirectory = directory;
+		for (AbstractPattern abstractPattern : this.patterns) {
+			if (abstractPattern.applicable(newDirectory)) {
+				newDirectory = abstractPattern.apply(newDirectory, localDateTime);
 			}
 		}
-		
-		return directory;
+
+		return newDirectory;
 	}
 }

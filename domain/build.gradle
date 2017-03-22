@@ -12,6 +12,9 @@ task run(type: JavaExec) {
 
 dependencies {  
   compile 'com.drewnoakes:metadata-extractor:2.10.1'
+  compile 'org.json:json:20160212'
+  compile 'commons-io:commons-io:2.5'
+  compile 'org.apache.commons:commons-lang3:3.4'
   testCompile 'junit:junit:4.12'
 }
 

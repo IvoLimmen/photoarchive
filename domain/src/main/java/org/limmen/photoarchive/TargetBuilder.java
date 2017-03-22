@@ -3,33 +3,33 @@ package org.limmen.photoarchive;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import org.limmen.photoarchive.pattern.PatternApplier;
 
 public class TargetBuilder {
 
-	private String pattern;
-
 	private final DateExtractor dateExtractor;
 
-	private final Path targetPath;
+	private final LocationExtractor locationExtractor;
 	
+	private final PatternApplier patternApplier;
+
+	private final Path targetPath;
+
 	public TargetBuilder(Context context) {
-		this.dateExtractor = new DateExtractor(context.isPreferExif());
-		this.pattern = context.getTargetPattern();
+		this.dateExtractor = new DateExtractor(context);
+		this.locationExtractor = new LocationExtractor(context);
 		this.targetPath = context.getTargetPath().toPath();
+		this.patternApplier = new PatternApplier(context.getTargetPattern());
 	}
 
 	public Path createTarget(Path file) throws IOException {
-		LocalDateTime date = dateExtractor.getCreationDate(file);
-
-		List<String> dirs = new ArrayList<>();
-		dirs.add(Integer.toString(date.getYear()));
-		dirs.add(rpad(Integer.toString(date.getMonthValue()), 2));
-		dirs.add(rpad(Integer.toString(date.getDayOfMonth()), 2));
-
-		Path target = Paths.get(this.targetPath.toString(), dirs.toArray(new String[3]));
+		FileMetadata fileMetadata = new FileMetadata();
+		dateExtractor.extractCreationDate(file, fileMetadata);
+		locationExtractor.extractLocation(file, fileMetadata);
+					
+		System.out.println("Starting pattern applier..");
+		Path target = Paths.get(this.targetPath.toString(), patternApplier.apply(fileMetadata));
+		System.out.println("DONE: target=" + target.toString());
 
 		target.toFile().mkdirs();
 

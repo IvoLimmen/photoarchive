@@ -1,6 +1,6 @@
 package org.limmen.photoarchive.pattern;
 
-import java.time.LocalDateTime;
+import org.limmen.photoarchive.FileMetadata;
 
 public class ShortMonthPattern extends AbstractPattern {
 
@@ -10,8 +10,8 @@ public class ShortMonthPattern extends AbstractPattern {
 	}
 
 	@Override
-	public String apply(String directory, LocalDateTime localDateTime) {
-		int month = localDateTime.getMonthValue();
+	public String apply(String directory, FileMetadata metadata) {
+		int month = metadata.getLocalDateTime().getMonthValue();
 		return directory.replace("m", Integer.toString(month));
 	}
 

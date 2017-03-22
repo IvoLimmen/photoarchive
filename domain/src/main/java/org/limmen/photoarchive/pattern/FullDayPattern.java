@@ -1,6 +1,6 @@
 package org.limmen.photoarchive.pattern;
 
-import java.time.LocalDateTime;
+import org.limmen.photoarchive.FileMetadata;
 
 public class FullDayPattern extends AbstractPattern {
 
@@ -10,8 +10,8 @@ public class FullDayPattern extends AbstractPattern {
 	}
 
 	@Override
-	public String apply(String directory, LocalDateTime localDateTime) {
-		String day = Integer.toString(localDateTime.getDayOfYear());
+	public String apply(String directory, FileMetadata metadata) {
+		String day = Integer.toString(metadata.getLocalDateTime().getDayOfYear());
 		return directory.replace("ddd", day);
 	}
 }

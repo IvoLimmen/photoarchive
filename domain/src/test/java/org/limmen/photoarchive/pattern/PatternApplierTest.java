@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
+import org.limmen.photoarchive.FileMetadata;
 
 public class PatternApplierTest {
 
@@ -13,8 +14,9 @@ public class PatternApplierTest {
 	public void testOneDirectorySimplePattern() {
 		fixture = new PatternApplier("yymmdd");
 		
-		LocalDateTime localDateTime = LocalDateTime.of(2017, 3, 19, 12, 5, 24);
-		String[] directories = fixture.apply(localDateTime);
+		FileMetadata fileMetadata = new FileMetadata();
+		fileMetadata.setLocalDateTime(LocalDateTime.of(2017, 3, 19, 12, 5, 24));
+		String[] directories = fixture.apply(fileMetadata);
 		
 		assertNotNull(directories);
 		assertEquals(1, directories.length);
@@ -25,8 +27,9 @@ public class PatternApplierTest {
 	public void testOneDirectoryBiggerPattern() {
 		fixture = new PatternApplier("yyyymmdd");
 		
-		LocalDateTime localDateTime = LocalDateTime.of(2017, 3, 19, 12, 5, 24);
-		String[] directories = fixture.apply(localDateTime);
+		FileMetadata fileMetadata = new FileMetadata();
+		fileMetadata.setLocalDateTime(LocalDateTime.of(2017, 3, 19, 12, 5, 24));
+		String[] directories = fixture.apply(fileMetadata);
 		
 		assertNotNull(directories);
 		assertEquals(1, directories.length);
@@ -37,8 +40,9 @@ public class PatternApplierTest {
 	public void testThreeDirectoryDefaultPattern() {
 		fixture = new PatternApplier("yyyy\\mm\\dd");
 		
-		LocalDateTime localDateTime = LocalDateTime.of(2017, 3, 19, 12, 5, 24);
-		String[] directories = fixture.apply(localDateTime);
+		FileMetadata fileMetadata = new FileMetadata();
+		fileMetadata.setLocalDateTime(LocalDateTime.of(2017, 3, 19, 12, 5, 24));
+		String[] directories = fixture.apply(fileMetadata);
 		
 		assertNotNull(directories);
 		assertEquals(3, directories.length);
@@ -51,8 +55,9 @@ public class PatternApplierTest {
 	public void testTwoDirectoryYearWithMonthDayPattern() {
 		fixture = new PatternApplier("yyyy\\mm-dd");
 		
-		LocalDateTime localDateTime = LocalDateTime.of(2017, 3, 19, 12, 5, 24);
-		String[] directories = fixture.apply(localDateTime);
+		FileMetadata fileMetadata = new FileMetadata();
+		fileMetadata.setLocalDateTime(LocalDateTime.of(2017, 3, 19, 12, 5, 24));
+		String[] directories = fixture.apply(fileMetadata);
 		
 		assertNotNull(directories);
 		assertEquals(2, directories.length);
@@ -64,8 +69,9 @@ public class PatternApplierTest {
 	public void testFullMonthPattern() {
 		fixture = new PatternApplier("yyyy\\mmm-dd");
 		
-		LocalDateTime localDateTime = LocalDateTime.of(2017, 3, 19, 12, 5, 24);
-		String[] directories = fixture.apply(localDateTime);
+		FileMetadata fileMetadata = new FileMetadata();
+		fileMetadata.setLocalDateTime(LocalDateTime.of(2017, 3, 19, 12, 5, 24));
+		String[] directories = fixture.apply(fileMetadata);
 		
 		assertNotNull(directories);
 		assertEquals(2, directories.length);
@@ -77,8 +83,9 @@ public class PatternApplierTest {
 	public void testFullMonthPattern2() {
 		fixture = new PatternApplier("yyyy\\dd-mmm");
 		
-		LocalDateTime localDateTime = LocalDateTime.of(2017, 3, 19, 12, 5, 24);
-		String[] directories = fixture.apply(localDateTime);
+		FileMetadata fileMetadata = new FileMetadata();
+		fileMetadata.setLocalDateTime(LocalDateTime.of(2017, 3, 19, 12, 5, 24));
+		String[] directories = fixture.apply(fileMetadata);
 		
 		assertNotNull(directories);
 		assertEquals(2, directories.length);
@@ -90,8 +97,9 @@ public class PatternApplierTest {
 	public void testYearDayPatterm() {
 		fixture = new PatternApplier("yyyy\\ddd");
 		
-		LocalDateTime localDateTime = LocalDateTime.of(2017, 3, 19, 12, 5, 24);
-		String[] directories = fixture.apply(localDateTime);
+		FileMetadata fileMetadata = new FileMetadata();
+		fileMetadata.setLocalDateTime(LocalDateTime.of(2017, 3, 19, 12, 5, 24));
+		String[] directories = fixture.apply(fileMetadata);
 		
 		assertNotNull(directories);
 		assertEquals(2, directories.length);
