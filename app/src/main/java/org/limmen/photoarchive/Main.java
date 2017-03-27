@@ -2,6 +2,7 @@ package org.limmen.photoarchive;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -22,7 +23,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	private final Context context = new Context();
+	private final Context context = Settings.getInitialContext();
 
 	private final DirectoryChooser directoryChooser = new DirectoryChooser();
 
@@ -41,12 +42,10 @@ public class Main extends Application {
 	private final CheckBox preferExif = new CheckBox("Prefer EXIF");
 
 	public Main() {
-		this.context.setSourcePath(new File(System.getProperty("user.home"), "Downloads"));
-		this.context.setTargetPath(new File(System.getProperty("user.home"), "Pictures"));
-		this.overwrite.selectedProperty().setValue(false);
-		this.preferExif.selectedProperty().setValue(true);
-		this.extentions.setText("jpg,jpeg,mp4");
-		this.targetPathPattern.setText("yyyy\\mm\\dd");
+		this.overwrite.selectedProperty().setValue(context.isOverwrite());
+		this.preferExif.selectedProperty().setValue(context.isPreferExif());
+		this.extentions.setText(context.getExtentions().stream().collect(Collectors.joining(",")));
+		this.targetPathPattern.setText(context.getTargetPattern());
 		this.sourceDirectory.setText(this.context.getSourcePath().getAbsolutePath());
 		this.targetDirectory.setText(this.context.getTargetPath().getAbsolutePath());
 	}
@@ -132,6 +131,7 @@ public class Main extends Application {
 	}
 
 	private void onClickExit(ActionEvent event) {
+		Settings.setInitialContext(context);
 		System.exit(0);
 	}
 
