@@ -161,7 +161,7 @@ public class Main extends Application {
 		context.setTargetPattern(targetPathPattern.getText());
 		context.getExtentions().clear();
 		if (extentions.getText() != null && extentions.getText().length() > 0) {
-			context.getExtentions().addAll(Arrays.asList(extentions.getText().split(",")));
+			context.getExtentions().addAll(Arrays.asList(extentions.getText().toLowerCase().split(",")));
 		}
 		context.setOverwrite(overwrite.selectedProperty().getValue());
 		context.setPreferExif(preferExif.selectedProperty().getValue());

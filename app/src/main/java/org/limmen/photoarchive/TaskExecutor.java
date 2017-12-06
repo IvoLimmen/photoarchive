@@ -36,7 +36,9 @@ public class TaskExecutor extends Task<Void> implements ProgressMonitor {
 		Platform.runLater(() -> {
 			failedProperty.set(failedProperty.get() + 1);
 			failedList.add(file.toString());
-		});
+         System.out.println("FAILED:" + file.getFileName());	
+         throwable.printStackTrace();
+	});
 	}
 
 	public List<String> getFailedList() {

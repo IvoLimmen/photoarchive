@@ -27,20 +27,10 @@ public class TargetBuilder {
 		dateExtractor.extractCreationDate(file, fileMetadata);
 		locationExtractor.extractLocation(file, fileMetadata);
 					
-		System.out.println("Starting pattern applier..");
 		Path target = Paths.get(this.targetPath.toString(), patternApplier.apply(fileMetadata));
-		System.out.println("DONE: target=" + target.toString());
 
 		target.toFile().mkdirs();
 
 		return Paths.get(target.toString(), file.getFileName().toString());
-	}
-
-	private String rpad(String name, int length) {
-		while (name.length() < length) {
-			name = "0".concat(name);
-		}
-
-		return name;
 	}
 }

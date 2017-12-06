@@ -39,8 +39,8 @@ public class LocationExtractor {
 			}
 		}
 		catch (ImageProcessingException ipe) {
-			throw new IOException(ipe);
-		}
+         // ignore, we simply will not have the data
+      }
 	}
 
 	private JSONObject downloadJSON(String url) throws IOException {
