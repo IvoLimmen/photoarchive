@@ -12,75 +12,73 @@ import javafx.concurrent.Task;
 
 public class TaskExecutor extends Task<Void> implements ProgressMonitor {
 
-	private final List<String> failedList = new ArrayList<>();
+   private final List<String> failedList = new ArrayList<>();
 
-	private final SimpleLongProperty failedProperty = new SimpleLongProperty();
+   private final SimpleLongProperty failedProperty = new SimpleLongProperty();
 
-	private final FileArchiver fileArchiver;
+   private final FileArchiver fileArchiver;
 
-	private final SimpleStringProperty fileProperty = new SimpleStringProperty();
+   private final SimpleStringProperty fileProperty = new SimpleStringProperty();
 
-	private final List<String> skippedList = new ArrayList<>();
+   private final List<String> skippedList = new ArrayList<>();
 
-	private final SimpleLongProperty skippedProperty = new SimpleLongProperty();
+   private final SimpleLongProperty skippedProperty = new SimpleLongProperty();
 
-	public TaskExecutor(Context context) {
-		failedList.clear();
-		skippedList.clear();
+   public TaskExecutor(Context context) {
+      failedList.clear();
+      skippedList.clear();
 
-		this.fileArchiver = new FileArchiver(context, this);
-	}
+      this.fileArchiver = new FileArchiver(context, this);
+   }
 
-	@Override
-	public void failedFile(Path file, Throwable throwable) {
-		Platform.runLater(() -> {
-			failedProperty.set(failedProperty.get() + 1);
-			failedList.add(file.toString());
-         System.out.println("FAILED:" + file.getFileName());	
-         throwable.printStackTrace();
-	});
-	}
+   @Override
+   public void failedFile(Path file, Throwable throwable) {
+      Platform.runLater(() -> {
+         failedProperty.set(failedProperty.get() + 1);
+         failedList.add(file.toString());
+      });
+   }
 
-	public List<String> getFailedList() {
-		return failedList;
-	}
+   public List<String> getFailedList() {
+      return failedList;
+   }
 
-	public ReadOnlyLongProperty getFailedProperty() {
-		return failedProperty;
-	}
+   public ReadOnlyLongProperty getFailedProperty() {
+      return failedProperty;
+   }
 
-	public ReadOnlyStringProperty getFileProperty() {
-		return fileProperty;
-	}
+   public ReadOnlyStringProperty getFileProperty() {
+      return fileProperty;
+   }
 
-	public List<String> getSkippedList() {
-		return skippedList;
-	}
+   public List<String> getSkippedList() {
+      return skippedList;
+   }
 
-	public ReadOnlyLongProperty getSkippedProperty() {
-		return skippedProperty;
-	}
+   public ReadOnlyLongProperty getSkippedProperty() {
+      return skippedProperty;
+   }
 
-	@Override
-	public void skipFile(Path file) {
-		Platform.runLater(() -> {
-			skippedProperty.set(skippedProperty.get() + 1);
-			skippedList.add(file.toString());
-		});
-	}
+   @Override
+   public void skipFile(Path file) {
+      Platform.runLater(() -> {
+         skippedProperty.set(skippedProperty.get() + 1);
+         skippedList.add(file.toString());
+      });
+   }
 
-	@Override
-	public void updateProgress(Path currentFile, long current, long total) {
-		Platform.runLater(() -> {
-			this.fileProperty.set(currentFile.getFileName().toString());
-		});
-		this.updateProgress(current, total);
-	}
+   @Override
+   public void updateProgress(Path currentFile, long current, long total) {
+      Platform.runLater(() -> {
+         this.fileProperty.set(currentFile.getFileName().toString());
+      });
+      this.updateProgress(current, total);
+   }
 
-	@Override
-	protected Void call() throws Exception {
-		fileArchiver.archive();
-		return null;
-	}
+   @Override
+   protected Void call() throws Exception {
+      fileArchiver.archive();
+      return null;
+   }
 
 }
