@@ -1,5 +1,4 @@
 build
-.nb-gradle
-.gradle
 /app/target/
 /domain/target/
+nbactions.xml
