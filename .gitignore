@@ -1,3 +1,7 @@
+.classpath
+.project
+.settings/
+.vscode/
 build
 /app/target/
 /domain/target/

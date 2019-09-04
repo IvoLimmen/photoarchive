@@ -31,14 +31,13 @@ Look at the tooltip for more information.
 ## Prerequisites
 
   * Git
-  * Java 8
-  * Gradle
+  * Java 11
+  * Maven
 
 ## Steps
 
 	git clone git@github.com:IvoLimmen/photoarchive.git
 
-	./gradlew fatJar
+	mvn clean install	
 
-	java -jar app/build/libs/PhotoArchive-1.0-SNAPSHOT.jar
-
+  mvn -pl app exec:java
