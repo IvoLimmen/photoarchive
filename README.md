@@ -31,13 +31,13 @@ Look at the tooltip for more information.
 ## Prerequisites
 
   * Git
-  * Java 11
+  * Java 21 (with FX)
   * Maven
 
 ## Steps
 
-	git clone git@github.com:IvoLimmen/photoarchive.git
+	  git clone git@github.com:IvoLimmen/photoarchive.git
 
-	mvn clean install	
+	  mvn clean install	
 
-  mvn -pl app exec:java
+    mvn -pl app exec:java

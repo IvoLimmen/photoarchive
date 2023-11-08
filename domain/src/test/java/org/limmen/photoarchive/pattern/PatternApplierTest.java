@@ -1,9 +1,11 @@
 package org.limmen.photoarchive.pattern;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.LocalDateTime;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.limmen.photoarchive.FileMetadata;
 
 public class PatternApplierTest {
