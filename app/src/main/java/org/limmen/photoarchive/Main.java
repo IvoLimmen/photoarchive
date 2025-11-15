@@ -53,7 +53,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.stage = primaryStage;
-//      primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/1f4d1.png")));
 		primaryStage.setTitle("PhotoArchive");
 		primaryStage.setScene(mainScene());
 		primaryStage.setResizable(false);
